@@ -76,3 +76,50 @@ pip install -r requirements.txt
 ---
 
 ## 📁 Repository structure
+databricks-medallion-pipeline/
+├── notebooks/
+│   ├── bronze/         # Raw ingestion notebooks
+│   ├── silver/         # Cleaning, typing, enrichment
+│   ├── gold/           # Business aggregations
+│   └── utils/          # Shared helpers (logging, schemas, QA)
+├── src/                # Local Python (helpers, tests)
+│   ├── utils/
+│   └── tests/
+├── data/
+│   ├── raw/            # Pointers to source data (the data itself lives in Databricks)
+│   └── reference/      # Small lookup tables (taxi zones)
+├── docs/
+│   ├── architecture/   # Diagrams (Mermaid source + PNG)
+│   └── screenshots/    # Databricks UI screenshots, dashboard captures
+├── scripts/            # One-shot utilities
+├── README.md
+├── LICENSE             # MIT
+└── .gitignore
+
+---
+
+## 📈 Status
+
+This repository is being built phase by phase. Current state:
+
+- [x] **Phase 0** — Scaffolding, architecture diagram, README
+- [ ] **Phase 1** — Bronze layer: raw ingestion with audit columns
+- [ ] **Phase 2** — Silver layer: cleaning + zone enrichment
+- [ ] **Phase 3** — Gold layer: business aggregates
+- [ ] **Phase 4** — SQL dashboard
+- [ ] **Phase 5** — Data-quality framework
+- [ ] **Phase 6** — Polish: screenshots, demo, final README
+
+---
+
+## 📜 License
+
+MIT — see [`LICENSE`](LICENSE).
+
+---
+
+## 👤 Author
+
+**Hugo Correia** — Data Scientist · ML / AI Engineer · Lisbon, Portugal
+
+[GitHub](https://github.com/hugocorreia123) · [LinkedIn](https://www.linkedin.com/in/hugogncorreia) · Hugocorreia55@hotmail.com
