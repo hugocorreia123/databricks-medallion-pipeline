@@ -227,4 +227,3 @@ metastore_db/
 # Local data downloads (data lives on Databricks)
 data/raw/*.parquet
 data/raw/*.csv
-GI_EOF
