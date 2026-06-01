@@ -98,21 +98,6 @@ databricks-medallion-pipeline/
 ├── LICENSE             # MIT
 └── .gitignore
 ```
-
----
-
-## 📈 Status
-
-This repository is being built phase by phase. Current state:
-
-- [x] **Phase 0** — Scaffolding, architecture diagram, README
-- [ ] **Phase 1** — Bronze layer: raw ingestion with audit columns
-- [ ] **Phase 2** — Silver layer: cleaning + zone enrichment
-- [ ] **Phase 3** — Gold layer: business aggregates
-- [ ] **Phase 4** — SQL dashboard
-- [ ] **Phase 5** — Data-quality framework
-- [ ] **Phase 6** — Polish: screenshots, demo, final README
-
 ---
 
 ## 📜 License
