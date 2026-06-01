@@ -1,0 +1,43 @@
+cat > docs/architecture/architecture.mmd << 'EOF'
+flowchart LR
+  %% ----- Source -----
+  src[("NYC TLC<br/>Open Data Portal<br/><i>parquet</i>")]:::source
+
+  %% ----- Ingestion -----
+  ingest["📥 Ingestion notebook<br/><i>read raw parquet</i><br/><i>add audit columns</i>"]:::process
+
+  %% ----- Bronze -----
+  bronze[("🥉 Bronze<br/><i>delta table</i><br/>raw + lineage")]:::bronze
+
+  %% ----- Silver -----
+  silver_nb["🧹 Cleaning notebook<br/><i>type enforcement</i><br/><i>quality filters</i><br/><i>zone enrichment</i>"]:::process
+  silver[("🥈 Silver<br/><i>delta table</i><br/>cleaned + enriched")]:::silver
+
+  %% ----- Gold -----
+  gold_nb["📊 Aggregation notebooks<br/><i>daily revenue</i><br/><i>hourly demand</i><br/><i>zone popularity</i>"]:::process
+  gold[("🥇 Gold<br/><i>delta tables</i><br/>analytics-ready")]:::gold
+
+  %% ----- Consumption -----
+  dash["📈 Databricks SQL<br/>dashboard"]:::output
+
+  %% ----- Flow -----
+  src --> ingest --> bronze
+  bronze --> silver_nb --> silver
+  silver --> gold_nb --> gold
+  gold --> dash
+
+  %% ----- Quality gates (parallel concern) -----
+  qa["✅ Data-quality checks<br/><i>assertions across layers</i>"]:::qa
+  bronze -. validates .-> qa
+  silver -. validates .-> qa
+  gold -. validates .-> qa
+
+  %% ----- Styling -----
+  classDef source fill:#E5E7EB,stroke:#4B5563,color:#111827
+  classDef process fill:#F3F4F6,stroke:#6B7280,color:#111827
+  classDef bronze fill:#FED7AA,stroke:#9A3412,color:#1F2937
+  classDef silver fill:#E5E7EB,stroke:#374151,color:#1F2937
+  classDef gold fill:#FEF3C7,stroke:#92400E,color:#1F2937
+  classDef output fill:#DBEAFE,stroke:#1D4ED8,color:#111827
+  classDef qa fill:#DCFCE7,stroke:#166534,color:#111827
+EOF
