@@ -76,6 +76,8 @@ pip install -r requirements.txt
 ---
 
 ## 📁 Repository structure
+
+```
 databricks-medallion-pipeline/
 ├── notebooks/
 │   ├── bronze/         # Raw ingestion notebooks
@@ -95,6 +97,7 @@ databricks-medallion-pipeline/
 ├── README.md
 ├── LICENSE             # MIT
 └── .gitignore
+```
 
 ---
 
