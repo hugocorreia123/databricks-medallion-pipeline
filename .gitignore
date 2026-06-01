@@ -216,3 +216,15 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+cat >> .gitignore << 'GI_EOF'
+
+# Databricks
+.databricks/
+spark-warehouse/
+metastore_db/
+
+# Local data downloads (data lives on Databricks)
+data/raw/*.parquet
+data/raw/*.csv
+GI_EOF

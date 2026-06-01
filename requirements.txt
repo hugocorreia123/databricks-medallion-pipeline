@@ -1,0 +1,18 @@
+cat > requirements.txt << 'REQ_EOF'
+# Local Python dependencies for this project.
+# Databricks itself runs notebooks against its managed runtime — these
+# pinned versions are for local helper scripts, unit tests, and any
+# pre-processing that happens outside Databricks.
+
+# Core data libs
+pandas==2.2.2
+pyarrow==17.0.0
+requests==2.32.3
+
+# PySpark for local notebook prototyping (optional — Databricks provides Spark in the cloud)
+pyspark==3.5.3
+
+# Linting / testing
+pytest==8.3.3
+ruff==0.6.9
+REQ_EOF
