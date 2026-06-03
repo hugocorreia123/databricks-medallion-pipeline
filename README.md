@@ -8,6 +8,16 @@
 
 ---
 
+## 📈 The result — a working dashboard
+
+<p align="center">
+  <img src="docs/screenshots/dashboard.png" width="900" alt="Databricks SQL dashboard — KPIs, daily revenue line, demand heatmap, top pickup zones, and payment-method split"/>
+</p>
+
+The dashboard reads from four pre-aggregated Gold Delta tables (a total of ~280 rows distilled from 5.97 million raw trips). It surfaces five things at a glance: total revenue and trip count for the period, the daily revenue rhythm with its visible weekday/weekend cadence, the hour-of-week demand heatmap (Thursday/Friday evenings dominate), the top 15 pickup zones colour-coded by borough, and the payment-method split with the well-known cash-tip blind spot.
+
+---
+
 ## 🎯 Goal
 
 Build the canonical production data-engineering pattern end-to-end, on real public data large enough that Spark actually matters: ingest raw trip records into a Bronze layer with full lineage, clean and enrich them into Silver, aggregate into business-ready Gold tables, and expose the result through a Databricks SQL dashboard. Document the data-quality strategy honestly along the way.
