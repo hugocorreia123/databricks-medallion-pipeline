@@ -111,6 +111,29 @@ databricks-medallion-pipeline/
 ```
 ---
 
+## ✅ Data quality & lessons learned
+
+A medallion pipeline is only as trustworthy as the contracts between its layers. This project includes a small custom assertion framework (`notebooks/utils/data_quality_checks.py`) that validates 13 contracts across Bronze, Silver, and Gold, and a runner notebook (`notebooks/qa/01_run_quality_checks.py`) that executes them and prints a clean pass/fail report.
+
+<p align="center">
+  <img src="docs/screenshots/qa_report.png" width="900" alt="Data quality report — 13 checks across Bronze, Silver, and Gold, all passing"/>
+</p>
+
+The most important check is the **reconciliation assertion** at the Gold layer: the sum of `trip_count` in `gold.daily_revenue` must equal the row count of `silver.yellow_taxi`. If aggregation is silently dropping rows, this check catches it. Both `daily_revenue` and `payment_breakdown` reconcile to exactly **5,443,316** — the Silver row count — meaning no rows were lost in aggregation.
+
+### What we discovered while building
+
+Two non-obvious findings emerged during this project, both worth documenting honestly because they're typical of how real data engineering goes:
+
+**1. Eighteen timestamp glitches in NYC TLC data.** The first version of the Silver layer had filters for negative fares, zero-distance trips, dropoff-before-pickup, and impossible passenger counts. It passed eyeball inspection. But when the Gold `daily_revenue` aggregate ran, its date range came back as `2002-12-31 → 2024-03-01` — clearly wrong. A diagnostic groupBy on `year(tpep_pickup_datetime)` revealed eighteen stray rows scattered across 2002, 2008, 2009, 2023, and March 2024. The TLC dataset occasionally contains records with corrupted pickup timestamps that look fine until they hit a daily aggregate. The fix was a two-line filter pinning the pickup window to `[2024-01-01, 2024-03-01)`, plus the assertion `silver_pickup_in_expected_window` to catch any recurrence. The broader lesson: downstream aggregates are themselves a data-quality test, and they sometimes reveal upstream issues no row-level check would surface.
+
+**2. Cash tips are systematically zero.** The Gold `payment_breakdown` table shows credit-card trips averaging **$4.15** in tips and cash trips averaging **$0.00**. This is not a real customer-behaviour pattern — it's a known TLC reporting artefact. The trip-record schema only captures tips that flow through the in-cab payment terminal; cash tips handed directly to the driver are invisible to the data. Any tip-related analysis built on this Gold table is therefore biased downward, and any business question of the form "are drivers earning enough?" cannot be answered from TLC data alone. We surface this caveat openly in the dashboard rather than presenting a deceptively clean total-tips KPI.
+
+### How to extend the framework
+
+Each check is a one-function `(spark) -> (passed, message)` contract. Adding a new check is twelve lines and a one-line registration in the runner. The framework deliberately uses raw PySpark rather than PyDeequ or Great Expectations because thirteen checks don't justify a heavyweight dependency — but the surface area is the same, so migration would be straightforward once the assertion library grew past roughly twenty checks.
+---
+
 ## 📜 License
 
 MIT — see [`LICENSE`](LICENSE).
