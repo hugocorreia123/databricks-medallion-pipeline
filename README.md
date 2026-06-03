@@ -8,6 +8,16 @@
 
 ---
 
+## 🔁 Orchestration — the whole pipeline as one Databricks Workflow
+
+<p align="center">
+  <img src="docs/screenshots/workflow.png" width="900" alt="Databricks Workflow DAG — bronze_ingest → silver_clean → four parallel Gold tasks → qa_run_checks"/>
+</p>
+
+All six notebooks are chained into a single Databricks Job. `bronze_ingest` pulls the raw parquet files from the public source. `silver_clean` applies quality filters and joins the taxi-zone reference. The four Gold aggregators run in parallel — they only read from Silver and write independent tables. `qa_run_checks` runs last, after every Gold table has been refreshed, validating all 13 layer contracts. A single click rebuilds the entire pipeline from source to dashboard.
+
+---
+
 ## 📈 The result — a working dashboard
 
 <p align="center">
