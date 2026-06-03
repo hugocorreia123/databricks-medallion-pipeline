@@ -132,6 +132,7 @@ Two non-obvious findings emerged during this project, both worth documenting hon
 ### How to extend the framework
 
 Each check is a one-function `(spark) -> (passed, message)` contract. Adding a new check is twelve lines and a one-line registration in the runner. The framework deliberately uses raw PySpark rather than PyDeequ or Great Expectations because thirteen checks don't justify a heavyweight dependency — but the surface area is the same, so migration would be straightforward once the assertion library grew past roughly twenty checks.
+
 ---
 
 ## 📜 License
